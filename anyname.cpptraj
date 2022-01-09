@@ -1,0 +1,46 @@
+#cpptraj Mt22
+###### WAT CADENA A #####
+parm ../../Mt22_O_500.parm7
+trajin ../../Trayectoria/[0-5]00ns.nc 1 last 10
+autoimage
+center :89
+image center familiar
+strip "!(:WAT&@O | :87,97,112&@CA)"
+trajout H2O_CA.nc
+run 
+clear all 
+
+###### AOX CADENA A #####
+parm ../../Mt22_O_500.parm7
+trajin ../../Trayectoria/[0-5]00ns.nc 1 last 10
+autoimage
+center :89
+image center familiar
+strip "!(:AOX&@O1 | :87,97,112&@CA)"
+trajout AOX_CA.nc
+run 
+clear all 
+
+###### WAT CADENA C #####
+parm ../../Mt22_O_500.parm7
+trajin ../../Trayectoria/[0-5]00ns.nc 1 last 10
+autoimage
+center :663
+image center familiar
+strip "!(:WAT&@O | :663,671,686&@CA)"
+trajout H2O_CC.nc
+run 
+clear all 
+
+###### AOX CADENA D #####
+parm ../../Mt22_O_500.parm7
+trajin ../../Trayectoria/[0-5]00ns.nc 1 last 10
+autoimage
+center :663
+image center familiar
+strip "!(:AOX&@O1 | :663,671,686&@CA)"
+trajout AOX_CC.nc
+run 
+clear all 
+
+exit
