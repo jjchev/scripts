@@ -23,6 +23,13 @@ read -p 'Parallel: Cuantos Nucleos? ' CORE
 read -p 'Parallel: Contar threads? (Solo OpenMPI) y/n ' MPI
 
 
+if [ ! -f ../../${PIPNAME}.parm7 ]
+    then echo "ERROR PIPNAME"; exit
+elif [ ! -f ../../Trayectoria/100ns.nc ]
+    then echo "ERROR Trayectoria"; exit
+fi
+
+
 CPPFILE_CHAINS=$(mktemp)
 CPPFILE_PDBS=$(mktemp)
 CPPFILE_NCS=$(mktemp)
@@ -54,14 +61,14 @@ echo -e "run \n clear all" >> "$6"
 
 CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_PDBS" "AOX&@O1" ${RESIDUOS_A} "AOX_CA.pdb" "1 1"
 CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_PDBS" "AOX&@O1" ${RESIDUOS_C} "AOX_CC.pdb" "1 1"
-CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_PDBS" "WAT&@O" ${RESIDUOS_A} "WAT_CA.pdb" "1 1"
-CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_PDBS" "WAT&@O" ${RESIDUOS_C} "WAT_CC.pdb" "1 1"
+CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_PDBS" "WAT&@O" ${RESIDUOS_A} "H2O_CA.pdb" "1 1"
+CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_PDBS" "WAT&@O" ${RESIDUOS_C} "H2O_CC.pdb" "1 1"
 
 
 CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "AOX&@O1" ${RESIDUOS_A} "AOX_CA.nc"
 CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "AOX&@O1" ${RESIDUOS_C} "AOX_CC.nc"
-CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "WAT&@O" ${RESIDUOS_A} "WAT_CA.nc"
-CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "WAT&@O" ${RESIDUOS_C} "WAT_CC.nc"
+CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "WAT&@O" ${RESIDUOS_A} "H2O_CA.nc"
+CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "WAT&@O" ${RESIDUOS_C} "H2O_CC.nc"
 
 
 #DEBUG
@@ -76,4 +83,3 @@ elif [ "$MPI" == "y" ]
     then mpirun --use-hwthread-cpus -np ${CORE} cpptraj.MPI -i "${CPPFILE_NCS}"
 else echo "ERROR"; exit
 fi
-
