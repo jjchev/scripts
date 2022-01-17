@@ -57,9 +57,9 @@ cp BASE_TXT "$2"
 for i in $(cat $1)
 do
 COUNTER=$(( COUNTER + 1 ))
-echo "vector AOX${i} dipole out ./raws/${3}_dipo_${i}.dat :${i} magnitude" >> "$2"
+echo "vector ${RANDOM}_${3}_${i} dipole out ./raws/${3}_dipo_${i}.dat :${i} magnitude" >> "$2"
 
-# Dividir por partes si no entra en memoria
+# Para dividir por partes si no entra en memoria
 # if [ $(( COUNTER % 500 )) -eq 0 ] ; then echo -e "run \n clear all \n" >> "$2"; cat BASE_TXT >> "$2"; fi
 
 done
@@ -67,11 +67,19 @@ done
 echo -e "run \n exit" >> "$2"
 }
 
-
 cpp_input "$LIST_AOX_A" AOX_A.cppin "AA"
 cpp_input "$LIST_AOX_C" AOX_C.cppin "AC"
 cpp_input "$LIST_WAT_A" WAT_A.cppin "WA"
 cpp_input "$LIST_WAT_C" WAT_C.cppin "WC"
+
+##Para unir todos (si alcanza la memoria) -
+
+
+rm ALL.TXT; cp BASE_TXT ALL.TXT; cat *.cppin | grep vector >> ALL.TXT; echo -e "run \n exit" >> ALL.TXT; rm BASE_TXT *.cppin
+
+
+
+
 
 
 
