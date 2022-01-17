@@ -7,16 +7,17 @@ mkdir raws 2>/dev/null
 
 
 #### crea lista de Agua y peroxido con las ids originales
-# TEMP_F=$(mktemp)
-# cat << EOF > "${TEMP_F}"
-# parm ../../"${PARM_NAME}"
-# trajin ${TRAJ_DIR}100ns.nc 1 1
-# printatoms :WAT out WAT.dat
-# printatoms :AOX out AOX.dat
-# run
-# exit
-# EOF
-# cpptraj -i "${TEMP_F}" 2>&1 /dev/null
+TEMP_F=$(mktemp)
+cat << EOF > "${TEMP_F}"
+parm ../../"${PARM_NAME}"
+trajin ${TRAJ_DIR}100ns.nc 1 1
+printatoms :WAT out WAT.dat
+printatoms :AOX out AOX.dat
+run
+exit
+EOF
+cpptraj -i "${TEMP_F}" 2>&1 /dev/null
+wait
 #
 
 ### Busca en la lista el resid del primer agua y peroxido (con un par de testeos de OK)
@@ -32,10 +33,10 @@ else echo "Usando como primer Agua $WAT_F, primer Peroxido $AOX_F"; fi
 
 
 LIST_AOX_A=$(mktemp); LIST_AOX_C=$(mktemp); LIST_WAT_A=$(mktemp); LIST_WAT_C=$(mktemp)
-awk -v var="$AOX_F" '{print $1+var}' AOX_CA.txt >> $LIST_AOX_A
-awk -v var="$AOX_F" '{print $1+var}' AOX_CC.txt >> $LIST_AOX_C
-awk -v var="$WAT_F" '{print $1+var}' H2O_CA.txt >> $LIST_WAT_A
-awk -v var="$WAT_F" '{print $1+var}' H2O_CC.txt >> $LIST_WAT_C
+awk -v var="$AOX_F" '{print $1+var-4}' AOX_CA.txt >> $LIST_AOX_A
+awk -v var="$AOX_F" '{print $1+var-4}' AOX_CC.txt >> $LIST_AOX_C
+awk -v var="$WAT_F" '{print $1+var-4}' H2O_CA.txt >> $LIST_WAT_A
+awk -v var="$WAT_F" '{print $1+var-4}' H2O_CC.txt >> $LIST_WAT_C
 
 ## Crea inputs cpptraj que extraen los xyz de esos residuos en el tiempo
 
