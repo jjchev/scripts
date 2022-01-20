@@ -1,3 +1,5 @@
+##pasando a pytraj. Resolver image y autoimage (no funciona con iterload / con load es muy grande para memoria). Centrar antes de extraer?
+
 
 PIPNAME="Mt23_O_500"
 RESIDUOS_C="657,665,680"
