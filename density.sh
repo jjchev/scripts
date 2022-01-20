@@ -2,8 +2,15 @@
 
 shopt -s lastpipe
 CPPFILE_CHAINS=$(mktemp)
-PARM_NAME="Mt23_O_500.parm7"
+PARM_NAME="step5_input.parm7"
 TRAJ_DIR="../../Trayectoria/"
+RESIDS_A="87,95,110" #Mt23 87,95,110
+RESIDS_C="657,665,680" #Mt657,665,680
+
+echo "Recordar colocar datos, usando PARNAME=$PARM_NAME | TRAJ_DIR=$TRAJ_DIR | RESIDS_A=$RESIDS_A | RESIDS_C=$RESIDS_C"
+
+sleep 4
+
 mkdir raws 2>/dev/null
 
 
@@ -49,6 +56,8 @@ awk -v var="$WAT_F" '{print $1+var-4}' H2O_CC.txt >> "$LIST_WAT_C"
 ## Crea inputs cpptraj que extraen los xyz de esos residuos en el tiempo
 
 echo -e "parm ../../${PARM_NAME} \n trajin ${TRAJ_DIR}[0-5]00ns.nc \n autoimage \n center :${CENTER_RES} \n image center familiar" >> BASE_TXT
+echo -e "\n vector center out CENT_A.dat :${RESIDS_A} \n  vector center out CENT_C.dat :${RESIDS_C} " >> BASE_TXT ## Centro para calculo posterior!
+
 
 function cpp_input () {
 COUNTER=0
@@ -75,7 +84,7 @@ cpp_input "$LIST_WAT_C" WAT_C.cppin "WC"
 ##Para unir todos (si alcanza la memoria) -
 
 
-rm ALL.TXT; cp BASE_TXT ALL.TXT; cat *.cppin | grep vector >> ALL.TXT; echo -e "run \n exit" >> ALL.TXT; rm BASE_TXT *.cppin
+rm ALL.TXT; cp BASE_TXT ALL.TXT; cat *.cppin | grep dipole >> ALL.TXT; echo -e "run \n exit" >> ALL.TXT; rm BASE_TXT *.cppin
 
 
 

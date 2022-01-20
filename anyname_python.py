@@ -1,11 +1,18 @@
-#! /bin/bash
-shopt -s lastpipe
 
-
-PIPNAME="step5_input"
+PIPNAME="Mt23_O_500"
 RESIDUOS_C="657,665,680"
 RESIDUOS_A="87,95,110" #Mt23 87,95,110
 
+import pytraj as pt
+traj = pt.iterload('../../Trayectoria/[0-5]ns.nc', 'step5_input.parm7')
+
+
+
+import pytraj as pt
+traj = pt.iterload('test.nc', 'step5_input.parm7')
+pt.write_traj('WAT.nc', traj(mask=':WAT'))
+pt.write_traj('AOX.nc', traj(mask=':AOX'))
+quit()
 
 echo "Recordar cambiar PIPNAME y residuos"
 echo "PIPNAME ACTUAL $PIPNAME"
@@ -65,10 +72,10 @@ CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_PDBS" "WAT&@O" ${RESIDUOS_A} "H2O_CA.pdb
 CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_PDBS" "WAT&@O" ${RESIDUOS_C} "H2O_CC.pdb" "100ns.nc 1 1"
 
 
-CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "AOX&@O1" ${RESIDUOS_A} "AOX_CA.nc" "[0-5]00ns.nc 1 last 10"
-CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "AOX&@O1" ${RESIDUOS_C} "AOX_CC.nc" "[0-5]00ns.nc 1 last 10"
-CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "WAT&@O" ${RESIDUOS_A} "H2O_CA.nc" "[0-5]00ns.nc 1 last 10"
-CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "WAT&@O" ${RESIDUOS_C} "H2O_CC.nc" "[0-5]00ns.nc 1 last 10"
+CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "AOX&@O1" ${RESIDUOS_A} "AOX_CA.nc" "[0-5]00ns.nc"
+CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "AOX&@O1" ${RESIDUOS_C} "AOX_CC.nc" "[0-5]00ns.nc"
+CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "WAT&@O" ${RESIDUOS_A} "H2O_CA.nc" "[0-5]00ns.nc"
+CP_INPUT $PIPNAME "${TER[@]}" "$CPPFILE_NCS" "WAT&@O" ${RESIDUOS_C} "H2O_CC.nc" "[0-5]00ns.nc"
 
 
 echo -e "\n exit" >> "$CPPFILE_NCS"; echo -e "\n exit" >> "$CPPFILE_PDBS";
